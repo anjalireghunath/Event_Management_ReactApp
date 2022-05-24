@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Header from './Header'
 
 const AddEvents = () => {
     var [name,setName]=useState("")
@@ -12,7 +13,7 @@ const AddEvents = () => {
     }
   return (
     <div>
-
+<Header/>
 
 <div className="container">
     <div className="row">
