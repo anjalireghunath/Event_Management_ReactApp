@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import Header from './Header'
 
@@ -10,6 +11,17 @@ const AddEvents = () => {
     const addData=()=>{
         const data={"name":name,"date":date,"venue":venue,"organiser":organiser,"contact":contact}
         console.log(data)
+        axios.post("http://localhost:4007/api/eventadd",data).then((response)=>{
+            console.log(response.data)
+            if(response.data.status=="success")
+            {
+                alert("successfully added")
+            }
+            else
+            {
+                alert("failed to add")
+            }
+        })
     }
   return (
     <div>

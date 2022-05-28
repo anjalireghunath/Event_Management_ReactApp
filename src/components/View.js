@@ -1,45 +1,31 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 import Header from './Header'
 
 const View = () => {
-    var viewEvent=[
-        {
-            "name":"Anjali",
-            "date":"12/10/21",
-            "venue":"online",
-            "organiser":"Anish",
-            "contact":"9846435642"
-        },
-        {
-            "name":"Nidhin",
-            "date":"12/10/21",
-            "venue":"online",
-            "organiser":"Anish",
-            "contact":"9865438765"
-        },
-        {
-            "name":"Divya",
-            "date":"20/10/21",
-            "venue":"online",
-            "organiser":"Mathew",
-            "contact":"9847867543"
-        },
-        {
-            "name":"Sruthy",
-            "date":"13/10/21",
-            "venue":"online",
-            "organiser":"Mohith",
-            "contact":"9846435768"
-        },
-        {
-            "name":"Adhi",
-            "date":"14/10/21",
-            "venue":"online",
-            "organiser":"George",
-            "contact":"9846435642"
-        }
-    ]
+    var [viewevent,setViewevent]=useState([])
+    var [loadstatus,setLoadstatus]=useState(true)
+    axios.get("http://localhost:4007/api/eventview").then((response)=>{
+      console.log(response.data)
+      setViewevent(response.data)
+      setLoadstatus(false)
+    })
     
+    const deleteData=(id)=>{
+      const data={"_id":id}
+      console.log(data)
+      axios.post("http://localhost:4007/api/delete",data).then((response)=>{
+          if(response.data.status=="success")
+          {
+              alert("successfully deleted")
+          }
+          else
+          {
+              alert("failed to delete")
+          }
+      })
+        } 
+
   return (
     <div>
 <Header/>
@@ -48,7 +34,10 @@ const View = () => {
             <div className='col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12'>
             <div className='row g-3'>
                 <div className='col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12'>
-                <table class="table table-primary table-striped">
+
+{loadstatus ? <div class="spinner-border" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div> :  <table class="table table-primary table-striped">
   <thead>
     <tr>
       <th scope="col">Name</th>
@@ -56,16 +45,18 @@ const View = () => {
       <th scope="col">Venue</th>
       <th scope="col">Organiser</th>
       <th scope="col">Contact</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    {viewEvent.map((value,key)=>{
+    {viewevent.map((value,key)=>{
       return <tr>
       <td>{value.name}</td>
       <td>{value.date}</td>
       <td>{value.venue}</td>
       <td>{value.organiser}</td>
       <td>{value.contact}</td>
+      <button className="btn btn-danger" onClick={()=>{deleteData(value._id)}}>DELETE</button>
     </tr>
     })}
     
@@ -75,6 +66,10 @@ const View = () => {
 </table>
 
 
+
+}
+
+               
 
                     </div>
                
